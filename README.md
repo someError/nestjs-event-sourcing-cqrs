@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-  <a href="https://github.com/someError" target="blank"><img src="https://avatars.githubusercontent.com/u/39949254?v=4" style="border-radius: 100%" width="120" alt="some error" /></a>
+  <a href="https://github.com/someError" target="blank"><img src="https://avatars.githubusercontent.com/u/39949254?v=4" style="border-radius: 100%!important;" width="120" alt="some error" /></a>
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
