@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider                  = "zod-prisma-types"
+  output                    = "./zod" 
+  createInputTypes          = false
+  createUpdateInputTypes    = false  
+  addInputTypeValidation    = false
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===================================================================
+// WRITE SIDE: Наш Event Store. Источник правды.
+// ===================================================================
+model TripEvent {
+  id        BigInt   @id @default(autoincrement())
+  streamId  String   @db.Uuid    // Идентификатор поездки (tripId)
+  payload   Json                 // Данные события в формате JSON
+  version   Int                  // Версия события в стриме
+  createdAt DateTime @default(now()) // Время создания события
+
+  @@unique([streamId, version], name: "uq_stream_version")
+  @@index([streamId])
+}
+
+// ===================================================================
+// READ SIDE: Наша проекция. Оптимизированный для чтения "кэш".
+// ===================================================================
+model TripSummary {
+  tripId      String     @id @db.Uuid
+  passengerId String?    @db.Uuid
+  driverId    String?    @db.Uuid
+  status      TripStatus
+  origin      Json?
+  destination Json?
+  price       Float?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum TripStatus {
+  SEARCHING_FOR_DRIVER
+  DRIVER_ASSIGNED
+  IN_PROGRESS
+  PAYMENT_PENDING
+  ARCHIVED
+}
